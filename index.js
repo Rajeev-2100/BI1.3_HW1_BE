@@ -28,7 +28,7 @@ async function createNewBook(newBook) {
     }
 }
 
-app.post('/books', async (req,res) => {
+app.post('/', async (req,res) => {
     try {
         const movie = await createNewBook(req.body)
         res.json(movie)
