@@ -103,7 +103,7 @@ async function updateBookData(bookId, dataToUpdate){
     }
 }
 
-app.post('/books/:bookId', async (req,res) => {
+app.post('/books/Id/:bookId', async (req,res) => {
     try {
         const updateBook = await updateBookData(req.params.bookTitle, req.body)
         if(updateBook.length != 0){
@@ -141,16 +141,17 @@ app.post('/books/title/:bookTitle', async (req,res) => {
 
 async function deletedBook (bookId){
     try {
-        const book = await Books.findOneAndDelete(bookId)
+        const book = await Books.findByIdAndDelete(bookId)
         return book
     } catch (error) {
         throw error
     }
 }
 
-app.delete('/books/delete/:bookId', async (req,res) => {
+app.delete('/books/:bookId', async (req,res) => {
     try {
         const bookData = await deletedBook(req.params.bookId)
+        console.log(bookData)
         if(bookData){
             res.status(201).json({message: "Book deleted successfully", book: bookData})
         }else{
@@ -166,6 +167,5 @@ const PORT = 3000
 app.listen(PORT, () => {
     console.log('Server is running on this ',PORT)
 })
-
 
 
