@@ -10,6 +10,7 @@ const fs = require('fs')
 intializeDatabase()
 
 const cors = require("cors");
+const { error } = require('console')
 const corsOptions = {
   origin: "*",
   credentials: true,
@@ -147,10 +148,15 @@ async function deletedBook (bookId){
     }
 }
 
-app.delete('/books/:bookId', async (req,res) => {
+app.delete('/books/delete/:bookId', async (req,res) => {
     try {
         const bookData = await deletedBook(req.params.bookId)
-        res.status(201).json({message: "Book deleted successfully", book: bookData})
+        if(bookData){
+            res.status(201).json({message: "Book deleted successfully", book: bookData})
+        }else{
+            res.status(404).json({error: 'Failed to bookId  detail'})
+            console.error(error.message)
+        }
     } catch (error) {
         res.status(500).json({error: 'Failed to fetch book Detail'})
     }
