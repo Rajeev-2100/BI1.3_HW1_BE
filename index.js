@@ -60,7 +60,7 @@ app.get('/books', async (req,res) => {
 
 async function getBooksDetailByTitle (bookTitle){
     try {
-        const books = await Books.findOne({bookTitle})
+        const books = await Books.findOne({title: bookTitle})
         return books 
     } catch (error) {
         throw error
@@ -96,7 +96,7 @@ app.get('/books/genre/:bookGenre', async (req,res) => {
 
 async function updateBookData(bookId, dataToUpdate){
     try {
-        const book = await Books.findOneAndUpdate(bookId, dataToUpdate, {new: true})
+        const book = await Books.findByIdAndUpdate(bookId, dataToUpdate, {new: true})
         return book
     } catch (error) {
         throw error
@@ -105,7 +105,7 @@ async function updateBookData(bookId, dataToUpdate){
 
 app.post('/books/Id/:bookId', async (req,res) => {
     try {
-        const updateBook = await updateBookData(req.params.bookTitle, req.body)
+        const updateBook = await updateBookData(req.params.bookId, req.body)
         if(updateBook.length != 0){
             res.status(201).json({message: 'Book Data updated successfully', book:updateBook})
         }else{
@@ -126,10 +126,10 @@ async function updateBookRatingByTitle(bookTitle, dataToUpdate){
     }
 }
 
-app.post('/books/title/:bookTitle', async (req,res) => {
+app.put('/books/title/:bookTitle', async (req,res) => {
     try {
         const updateBook = await updateBookRatingByTitle(req.params.bookTitle, req.body)
-        if(updateBook.length != 0){
+        if(updateBook){
             res.status(201).json({message: 'Book update Successfully', book: updateBook})
         }else{
             res.status(404).json({Error: 'Book title is not found'})
